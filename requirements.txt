@@ -1,0 +1,32 @@
+# Core orchestration
+langchain==0.1.20
+langchain-community==0.0.38
+langchain-huggingface==0.0.3
+
+# Vector store (pure Python / prebuilt wheel, NO C++ build)
+faiss-cpu==1.8.0
+
+# Embeddings + LLM inference (prebuilt wheels only)
+sentence-transformers==2.7.0
+transformers==4.41.2
+accelerate==0.31.0
+huggingface_hub==0.23.4
+torch==2.3.1
+
+# Document loaders
+pdfminer.six==20221105
+docx2txt==0.8
+unstructured==0.14.4
+openpyxl==3.1.2
+chardet==5.2.0
+
+# CLI / utilities
+click==8.1.7
+requests==2.32.3
+urllib3==1.26.19
+
+# Web UI
+flask==3.0.3
+streamlit==1.35.0
+streamlit-extras==0.4.2
+streamlit_chat==0.1.1

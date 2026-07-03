@@ -1,0 +1,32 @@
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Vector DB (regenerable via ingest.py)
+DB/
+
+# Logs
+file_ingest.log
+*.log
+
+# HuggingFace model cache (if accidentally created locally)
+models/
+
+# SOURCE_DOCUMENTS/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables
+.env

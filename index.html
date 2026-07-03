@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatIITK</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 h-screen flex flex-col">
+
+  <header class="bg-slate-800 text-white px-6 py-4 shadow-md">
+    <h1 class="text-xl font-bold">🎓 ChatIITK</h1>
+    <p class="text-slate-400 text-sm">Local RAG chatbot</p>
+  </header>
+
+  <main id="chat-window" class="flex-1 overflow-y-auto p-6 space-y-4"></main>
+
+  <footer class="bg-slate-800 p-4">
+    <form id="chat-form" class="flex gap-2 max-w-3xl mx-auto">
+      <input id="chat-input" type="text" placeholder="Ask something about IIT Kanpur..."
+        class="flex-1 rounded-full px-4 py-3 bg-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="off" />
+      <button type="submit" id="send-btn"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full transition disabled:opacity-50">
+        Send
+      </button>
+    </form>
+  </footer>
+
+<script>
+const API_URL = "http://localhost:8000/api/chat";
+const chatWindow = document.getElementById("chat-window");
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+const sendBtn = document.getElementById("send-btn");
+
+function addBubble(text, role) {
+  const wrapper = document.createElement("div");
+  wrapper.className = role === "user" ? "flex justify-end" : "flex justify-start";
+  const bubble = document.createElement("div");
+  bubble.className = role === "user"
+    ? "bg-indigo-600 text-white rounded-2xl rounded-br-sm px-4 py-2 max-w-lg whitespace-pre-wrap"
+    : "bg-slate-700 text-white rounded-2xl rounded-bl-sm px-4 py-2 max-w-lg whitespace-pre-wrap";
+  bubble.textContent = text;
+  wrapper.appendChild(bubble);
+  chatWindow.appendChild(wrapper);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+  return bubble;
+}
+
+chatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const question = chatInput.value.trim();
+  if (!question) return;
+
+  addBubble(question, "user");
+  chatInput.value = "";
+  sendBtn.disabled = true;
+  const loadingBubble = addBubble("Thinking...", "bot");
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+    const data = await res.json();
+    loadingBubble.textContent = data.answer;
+  } catch (err) {
+    loadingBubble.textContent = "Error contacting server: " + err.message;
+  } finally {
+    sendBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
